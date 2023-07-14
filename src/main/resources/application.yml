@@ -1,0 +1,49 @@
+server:
+ port: 8080
+ ssl:
+  key-store-type: ${KEYSTORE_TYPE:PKCS12}
+  key-store: classpath:${KEYSTORE_PATH}/${KEYSTORE_FILE_NAME}
+  key-store-password: ${KEYSTORE_PASSWORD}
+  key-alias: ${KEYSTORE_ALIAS}
+  enabled: ${SSL_ENABLED:false}
+spring:
+ application:
+  name: porfolio
+ profiles:
+  active: ${ENVIRONMENT:dev}
+ config:
+  import: optional:configserver:${CONFIG_SERVER_URL}
+ cloud:
+  config:
+   username: ${CONFIG_SERVER_USER_NAME}
+   password: ${CONFIG_SERVER_PASSWORD}
+ data:
+#  mongodb:
+#   host: ${MONGODB_URL}
+#   port:  ${MONGODB_PORT:27017}
+#   authentication-database: ${MONGODB_AUTH_DB}
+#   username: ${MONGODB_USERNAME}
+#   password: ${MONGODB_PASSWORD}
+#   database: ${MONGODB_DATA_BASE}
+#   auto-index-creation: true
+  rest:
+   basePath: ${BASE_REST_PATH:/api}
+ mail:
+  host:  ${MAIL_HOST:smtp.gmail.com}
+  port: ${MAIL_PORT:587}
+  username: ${MAIL_USERNAME}
+  password: ${MAIL_PASSWORD}
+  properties:
+   mail:
+    smtp:
+     auth: true
+     connectiontimeout: 5000
+     timeout: 5000
+     writetimeout: 5000
+     starttls:
+      enable: true
+ servlet:
+  multipart:
+   max-file-size: ${MAX_FILE_SIZE:35}
+   max-request-size: ${MAX_FILE_SIZE:35}
+   enabled: true
