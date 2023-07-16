@@ -52,8 +52,9 @@ public class DesignPatternController {
 	
 	@GetMapping("/builder")
     public Computer testBuilder() {
-		Computer comp = new Computer.ComputerBuilder(
-				"500 GB", "8 GB").setBluetoothEnabled(true)
+		Computer comp = new Computer
+				.ComputerBuilder("500 GB", "8 GB")
+				.setBluetoothEnabled(true)
 				.setGraphicsCardEnabled(true).build();
         
     	return comp;

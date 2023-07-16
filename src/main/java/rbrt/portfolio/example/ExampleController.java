@@ -2,6 +2,8 @@ package rbrt.portfolio.example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -11,12 +13,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import rbrt.portfolio.threads.CompletableFutureImp;
+import rbrt.portfolio.threads.FutureImp;
+import rbrt.portfolio.threads.RunnableImp;
+
 
 @RestController
 @RequestMapping("/example")
-public class IteratorsController {
+public class ExampleController {
 	
-	@GetMapping("/list")
+	@GetMapping("/randomList")
     public List<Integer> testSingleton() {
 		List<Integer> list = new ArrayList<>();
 		List<Integer> distinctList = new ArrayList<>();
@@ -49,11 +55,32 @@ public class IteratorsController {
 	
 	@GetMapping("/prime/{number}")
 	public String isPrimeNumber (@PathVariable Integer number) {
-		
 		Boolean isPrime = IntStream.rangeClosed(2, (int) (Math.sqrt(number)))
 			      .allMatch(n -> number % n != 0);
 		
 		return isPrime ? "Prime number" : "Not prime number";
+	}
+	
+	@GetMapping("/thread/runnable")
+	public void threadRunnableExample () {
+		Thread t1 = new Thread(new RunnableImp());
+		Thread t2 = new Thread(new RunnableImp());
+		Thread t3 = new Thread(new RunnableImp());
+		t1.start();
+		t2.start();
+		t3.start();
+	}
+	
+	@GetMapping("/thread/future/{number}/{number2}")
+	public Integer threadFutureExample (@PathVariable Integer number, @PathVariable Integer number2) throws InterruptedException, ExecutionException {
+		Future<Integer> future = new FutureImp().multiply(number, number2);
+		return future.get();
+	}
+	
+	@GetMapping("/thread/completablefuture")
+	public void threadCompletableFutureExample () throws InterruptedException, ExecutionException {
+		CompletableFutureImp completablefuture = new CompletableFutureImp();
+		completablefuture.runExamples();
 	}
 	
 	public int getRandomNumber(int min, int max) {
